@@ -5,14 +5,14 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1180,
+    height: 820,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux'
       ? {
-          icon: path.join(__dirname, '../../build/icon.png')
-        }
+        icon: path.join(__dirname, '../../build/icon.png')
+      }
       : {}),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
