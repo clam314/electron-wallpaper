@@ -5,3 +5,4 @@ out
 .vscode
 *.local
 build
+.DS_Store
