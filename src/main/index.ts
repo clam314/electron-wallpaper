@@ -8,6 +8,7 @@ function createWindow(): void {
     width: 1180,
     height: 820,
     show: false,
+    titleBarStyle: 'hidden',
     autoHideMenuBar: true,
     ...(process.platform === 'linux'
       ? {
