@@ -1,15 +1,17 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import MainLayoutVue from '@renderer/components/MainLayout.vue'
+import HomePage from '@renderer/views/home-page/index.vue'
 
 const routes = [
   {
     path: '/',
     component: MainLayoutVue,
+    redirect: '/home',
     children: [
       {
         path: 'home',
         name: '首页',
-        component: () => import('@renderer/views/home-page/index.vue'),
+        component: HomePage,
       },
       {
         path: 'download',
