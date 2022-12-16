@@ -1,9 +1,8 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 
 function createWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1180,
     height: 820,
@@ -36,6 +35,26 @@ function createWindow(): void {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
+  }
+
+
+  // 无边框窗口，适配windows导航栏按钮
+  if (platform.isWindows) {
+    ipcMain.on("window-min", function (): void {
+      mainWindow.minimize()
+    })
+
+    ipcMain.on("window-max", function (): void {
+      if (mainWindow.isMaximized()) {
+        mainWindow.restore();
+      } else {
+        mainWindow.maximize();
+      }
+    })
+
+    ipcMain.on('window-close', function (): void {
+      mainWindow.close();
+    })
   }
 }
 
@@ -70,6 +89,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.

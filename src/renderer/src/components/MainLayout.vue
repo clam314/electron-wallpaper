@@ -1,35 +1,39 @@
 <template>
-    <el-container class="app-container">
-        <el-aside class="app-container-aside">
-            <div class="app-container-aside-logo">
-                <el-avatar size="large" :src="logoImg" />
-            </div>
-            <el-menu default-active="/home" :collapse="true" router>
-                <el-menu-item index="/home">
-                    <el-icon><icon-menu /></el-icon>
-                    <span>壁纸</span>
-                </el-menu-item>
-                <el-menu-item index="/download">
-                    <el-icon>
-                        <download />
-                    </el-icon>
-                    <span>下载</span>
-                </el-menu-item>
-                <el-menu-item index="/setting">
-                    <el-icon>
-                        <setting />
-                    </el-icon>
-                    <span>设置</span>
-                </el-menu-item>
-            </el-menu>
-            <div class="app-container-aside-version">
-                <p>版本 1.0.0</p>
-            </div>
-        </el-aside>
+    <el-container>
+        <el-header>
+            <window-menubar />
+        </el-header>
+        <el-container class="app-container">
+            <el-aside class="app-container-aside">
+                <div class="app-container-aside-logo">
+                    <el-avatar size="large" :src="logoImg" />
+                </div>
+                <el-menu default-active="/home" :collapse="true" router>
+                    <el-menu-item index="/home">
+                        <el-icon :size="iconSize"><icon-menu /></el-icon>
+                        <span>壁纸</span>
+                    </el-menu-item>
+                    <el-menu-item index="/download">
+                        <el-icon :size="iconSize">
+                            <download />
+                        </el-icon>
+                        <span>下载</span>
+                    </el-menu-item>
+                    <el-menu-item index="/setting">
+                        <el-icon :size="iconSize">
+                            <setting />
+                        </el-icon>
+                        <span>设置</span>
+                    </el-menu-item>
+                </el-menu>
+                <div class="app-container-aside-version">
+                </div>
+            </el-aside>
 
-        <el-main class="app-container-main">
-            <router-view />
-        </el-main>
+            <el-main class="app-container-main">
+                <router-view />
+            </el-main>
+        </el-container>
     </el-container>
 </template>
   
@@ -37,24 +41,37 @@
 import { ref } from 'vue'
 import { Menu as IconMenu, Setting, Download } from '@element-plus/icons-vue'
 import logoImg from "../assets/logo.jpg"
+import WindowMenubar from './WindowMenubar.vue';
 
+const iconSize = 30;
 </script>
   
 <style lang="less" scoped>
+.el-header {
+    padding: 0;
+    height: auto;
+}
+
 .app-container {
-    height: 100vh;
+    height: 100%;
 
     &-aside {
         height: 100%;
-        width: 150px;
+        width: 80px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        -webkit-app-region: drag;
+        background-color: rgb(43, 43, 43);
+        border-radius: 30px;
+        margin-left: 10px;
+        margin-right: 10px;
+        position: relative;
+        bottom: 10px;
+
 
         &-logo {
-            margin-top: 30px;
+            margin-top: 0px;
             width: 100%;
             height: 100px;
             display: flex;
@@ -72,7 +89,15 @@ import logoImg from "../assets/logo.jpg"
             border-right: none;
 
             .el-menu-item {
-                --el-menu-active-color: white;
+                margin-top: 15px;
+                --el-menu-text-color: var(--menu-text-color);
+                --el-menu-active-color: var(--menu-active-color);
+                transition: none;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                }
             }
         }
     }

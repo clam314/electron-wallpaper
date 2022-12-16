@@ -1,10 +1,25 @@
+:root {
+  --navbar-height: 40px;
+  --main-background-color: rgb(22, 22, 22);
+  --main-text-color: rgba(240, 255, 255, 0.8);
+  --navbar-btn-hover-color: rgba(255, 255, 255, 0.1);
+  --menu-text-color: rgb(204, 204, 204);
+  --menu-active-color: rgb(255, 187, 51);
+
+}
+
+html {
+  height: 100%;
+}
+
 body {
   display: flex;
   flex-direction: column;
   font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Open Sans', sans-serif;
-  color: #86a5b1;
-  background-color: #051a84;
+  color: var(--main-text-color);
+  background-color: var(--main-background-color);
+  height: 100%;
 }
 
 * {
@@ -14,18 +29,6 @@ body {
 
 ul {
   list-style: none;
-}
-
-a {
-  color: #9feaf9;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  outline: none;
-}
-
-a:hover {
-  border-bottom: 1px solid;
 }
 
 #app {

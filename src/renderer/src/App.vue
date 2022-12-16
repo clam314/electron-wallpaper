@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <style lang="less">
-  @import './assets/css/styles.less';
+@import './assets/css/styles.less';
 </style>
