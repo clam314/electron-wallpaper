@@ -39,7 +39,7 @@ const searchText = ref<string>('')
 
         input {
             margin-left: 10px;
-            width: 90%;
+            flex: 1;
         }
     }
 }

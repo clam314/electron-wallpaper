@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
 import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 
+
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 1180,
@@ -16,7 +17,7 @@ function createWindow(): void {
       : {}),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
     }
   })
 
@@ -89,3 +90,4 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+

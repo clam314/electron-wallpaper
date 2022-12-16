@@ -62,6 +62,10 @@ const menuSelected = function (index: string): void {
 .app-container {
     height: 100%;
 
+    .el-main {
+        --el-main-padding: 0px;
+    }
+
     &-aside {
         height: 100%;
         width: 80px;
@@ -84,11 +88,6 @@ const menuSelected = function (index: string): void {
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        &-version {
-            position: absolute;
-            bottom: 30px;
         }
 
         .el-menu {
