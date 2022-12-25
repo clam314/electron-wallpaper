@@ -5,7 +5,7 @@
         <div class="img-container-wrapper">
           <template v-for="(item, index) in data" :key="index">
             <div class="img-container" :style="imgSize">
-              <el-image :src="item" />
+              <el-image :src="item?.thumbs?.small" />
             </div>
           </template>
 
@@ -13,17 +13,27 @@
       </el-scrollbar>
     </main>
     <footer>
-      <el-pagination :page-size="100" :pager-count="8" layout="prev, pager, next" :total="1000" />
+      <el-pagination v-model:current-page="pager.current_page" :page-size="4" :page-count="pager.last_page"
+        layout="prev, pager, next" />
     </footer>
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive, onMounted, ref, onUnmounted, computed } from 'vue';
+import { reactive, onMounted, ref, onUnmounted, computed, watch } from 'vue';
+import { searchWallpaper } from '../../request/index'
+import type { RootObject, Data, Thumb, Meta } from '../../request/SearchData'
 
-const data = reactive<string[]>([])
-for (let i = 0; i < 24; i++) {
-  data.push('https://th.wallhaven.cc/small/zy/zy8oqo.jpg')
-}
+const pager = reactive<Meta>({
+  current_page: 1,
+  last_page: 17,
+  per_page: 0,
+  total: 0,
+  query: '',
+  seed: ''
+})
+
+const data = reactive<Data[]>([])
+
 
 const barHeight = 40 + 40 + 10
 const mainHeight = ref<number>(800)
@@ -61,16 +71,44 @@ const changeWindow = debounce(() => {
   mainWidth.value = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
 })
 
-onMounted(() => {
+const queryWallper = async function (currentPage) {
+  const pageInfo = await searchWallpaper({ page: currentPage })
+  if (pageInfo.data) {
+    data.length = 0
+    data.push(...pageInfo.data)
+  }
+  if (pageInfo.meta) {
+    console.log(pageInfo.meta)
+    pager.current_page = pageInfo.meta.current_page
+    pager.last_page = pageInfo.meta.last_page
+  }
+}
+
+watch(() => pager.current_page, (value, oldwalue) => {
+  console.log(value, oldwalue)
+  queryWallper(value)
+})
+
+onMounted(async () => {
   mainHeight.value = (document.documentElement.clientHeight || window.innerHeight || document.body.clientHeight);
   mainWidth.value = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
   window.addEventListener('resize', changeWindow)
+
+  const pageInfo = await searchWallpaper({})
+  if (pageInfo.data) {
+    data.push(...pageInfo.data)
+  }
+  if (pageInfo.meta) {
+    console.log(pageInfo.meta)
+    pager.current_page = pageInfo.meta.current_page
+    pager.last_page = pageInfo.meta.last_page
+  }
 })
+
+
 onUnmounted(() => {
   window.removeEventListener('resize', changeWindow)
 })
-
-
 </script>
 <style lang="less" scoped>
 .container {
