@@ -96,7 +96,7 @@ onMounted(async () => {
 
   const pageInfo = await searchWallpaper({})
   if (pageInfo.data) {
-    data.push(...pageInfo.data)
+    // data.push(...pageInfo.data)
   }
   if (pageInfo.meta) {
     console.log(pageInfo.meta)

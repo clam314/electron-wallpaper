@@ -10,12 +10,246 @@
             <CloseBold />
         </el-icon>
     </div>
+    <div class="operation-btn-wrapper">
+        <el-icon class="operation-btn" @click="clickOperation">
+            <Operation />
+        </el-icon>
+    </div>
+    <el-drawer class="search-drawer" v-model="showDrawer" :with-header="false" :size="'38%'">
+        <div id="search-sorting-checks" class="framed">
+            <input type="radio" name="sorting" value="relevance" id="search-relevance" checked>
+            <label for="search-relevance">Relevance</label>
+            <input type="radio" name="sorting" value="random" id="search-random">
+            <label for="search-random">Random</label>
+            <input type="radio" name="sorting" value="date_added" id="search-date">
+            <label for="search-date">Date Added</label>
+            <input type="radio" name="sorting" value="views" id="search-views">
+            <label for="search-views">Views</label>
+            <input type="radio" name="sorting" value="favorites" id="search-favorites">
+            <label for="search-favorites">Favorites</label>
+            <input type="radio" name="sorting" value="toplist" id="search-toplist">
+            <label for="search-toplist">Toplist</label>
+            <input type="radio" name="sorting" value="hot" id="search-hot">
+            <label for="search-hot">Hot</label>
+            <input type="checkbox" name="order" value="desc" id="search-order">
+            <label for="search-order" original-title="Ascending/Descending">
+                <el-icon style="height: 100%;">
+                    <Top />
+                </el-icon>
+            </label>
+        </div>
+        <hr />
+        <div id="search-category-checks" class="framed">
+            <input type="checkbox" name="general" value="general" id="search-general" checked>
+            <label for="search-general">General</label>
+            <input type="checkbox" name="anime" value="anime" id="search-anime">
+            <label for="search-anime">Anime</label>
+            <input type="checkbox" name="people" value="people" id="search-people">
+            <label for="search-people">People</label>
+        </div>
+        <div id="search-purity-checks" class="framed">
+            <input type="checkbox" name="sfw" value="sfw" id="search-sfw" checked>
+            <label class="purity sfw" for="search-sfw">SFW</label>
+            <input type="checkbox" name="sketchy" value="sketchy" id="search-sketchy">
+            <label class="purity sketchy" for="search-sketchy">Sketchy</label>
+            <input type="checkbox" name="nsfw" value="nsfw" id="search-nsfw">
+            <label class="purity nsfw" for="search-nsfw">NSFW</label>
+        </div>
+        <hr />
+        <div class="resolution-wrapper respicker-wrapper">
+            <div class="framed">
+                <input type="radio" name="searchbar-respicter-limitation" id="searchbar-respicker-atleast"
+                    value="atleast" checked>
+                <label for="searchbar-respicker-atleast">
+                    <i class="far fa-plus"></i> At Least
+                </label>
+                <input type="radio" name="searchbar-respicker-limitation" id="searchbar-respicker-exactly"
+                    value="exactly">
+                <label for="searchbar-respicker-exactly">
+                    <i class="far fa-dot-circle"></i> Exactly
+                </label>
+            </div>
+            <div class="respicker">
+                <p class="respicker-native-info">Your screen resolution is <strong><em>5120 × 2880</em></strong>.</p>
+                <table class="label-table">
+                    <thead>
+                        <tr>
+                            <th>Ultrawide</th>
+                            <th>16:9</th>
+                            <th>16:10</th>
+                            <th>4:3</th>
+                            <th>5:4</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1080"
+                                    value="2560x1080"><label for="searchbar-respicker-2560x1080"
+                                    original-title="Dual 1080p">2560 × 1080</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x720"
+                                    value="1280x720"><label for="searchbar-respicker-1280x720" original-title="">1280 ×
+                                    720</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x800"
+                                    value="1280x800"><label for="searchbar-respicker-1280x800" original-title="">1280 ×
+                                    800</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x960"
+                                    value="1280x960"><label for="searchbar-respicker-1280x960" original-title="">1280 ×
+                                    960</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x1024"
+                                    value="1280x1024"><label for="searchbar-respicker-1280x1024" original-title="">1280
+                                    × 1024</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3440x1440"
+                                    value="3440x1440"><label for="searchbar-respicker-3440x1440" original-title="">3440
+                                    × 1440</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x900"
+                                    value="1600x900"><label for="searchbar-respicker-1600x900" original-title="">1600 ×
+                                    900</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x1000"
+                                    value="1600x1000"><label for="searchbar-respicker-1600x1000" original-title="">1600
+                                    × 1000</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x1200"
+                                    value="1600x1200"><label for="searchbar-respicker-1600x1200" original-title="">1600
+                                    × 1200</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x1280"
+                                    value="1600x1280"><label for="searchbar-respicker-1600x1280" original-title="">1600
+                                    × 1280</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x1600"
+                                    value="3840x1600"><label for="searchbar-respicker-3840x1600" original-title="">3840
+                                    × 1600</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1080"
+                                    value="1920x1080"><label for="searchbar-respicker-1920x1080"
+                                    original-title="Full HD">1920 × 1080</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1200"
+                                    value="1920x1200"><label for="searchbar-respicker-1920x1200" original-title="">1920
+                                    × 1200</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1440"
+                                    value="1920x1440"><label for="searchbar-respicker-1920x1440" original-title="">1920
+                                    × 1440</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1536"
+                                    value="1920x1536"><label for="searchbar-respicker-1920x1536" original-title="">1920
+                                    × 1536</label></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1440"
+                                    value="2560x1440"><label for="searchbar-respicker-2560x1440" original-title="">2560
+                                    × 1440</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1600"
+                                    value="2560x1600"><label for="searchbar-respicker-2560x1600" original-title="">2560
+                                    × 1600</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1920"
+                                    value="2560x1920"><label for="searchbar-respicker-2560x1920" original-title="">2560
+                                    × 1920</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x2048"
+                                    value="2560x2048"><label for="searchbar-respicker-2560x2048" original-title="">2560
+                                    × 2048</label></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x2160"
+                                    value="3840x2160"><label for="searchbar-respicker-3840x2160"
+                                    original-title="4k">3840 × 2160</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x2400"
+                                    value="3840x2400"><label for="searchbar-respicker-3840x2400" original-title="">3840
+                                    × 2400</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x2880"
+                                    value="3840x2880"><label for="searchbar-respicker-3840x2880" original-title="">3840
+                                    × 2880</label></td>
+                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x3072"
+                                    value="3840x3072"><label for="searchbar-respicker-3840x3072" original-title="">3840
+                                    × 3072</label></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div class="roportion-wrapper respicker-wrapper">
+            <div class="respicker">
+                <table class="label-table">
+                    <thead>
+                        <tr>
+                            <th>Wide</th>
+                            <th>Ultrawide</th>
+                            <th>Portrait</th>
+                            <th>Square</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2"><input type="checkbox" name="ratio" value="landscape" class="ratio"
+                                    id="searchbar-ratio-landscape"><label for="searchbar-ratio-landscape"> All Wide
+                                </label></td>
+                            <td><input type="checkbox" name="ratio" value="portrait" class="ratio"
+                                    id="searchbar-ratio-portrait"><label for="searchbar-ratio-portrait"> All Portrait
+                                </label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="ratio" value="16x9" class="ratio"
+                                    id="searchbar-ratio-16x9"><label for="searchbar-ratio-16x9">16 × 9</label></td>
+                            <td><input type="checkbox" name="ratio" value="21x9" class="ratio"
+                                    id="searchbar-ratio-21x9"><label for="searchbar-ratio-21x9">21 × 9</label></td>
+                            <td><input type="checkbox" name="ratio" value="9x16" class="ratio"
+                                    id="searchbar-ratio-9x16"><label for="searchbar-ratio-9x16">9 × 16</label></td>
+                            <td><input type="checkbox" name="ratio" value="1x1" class="ratio"
+                                    id="searchbar-ratio-1x1"><label for="searchbar-ratio-1x1">1 × 1</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="ratio" value="16x10" class="ratio"
+                                    id="searchbar-ratio-16x10"><label for="searchbar-ratio-16x10">16 × 10</label></td>
+                            <td><input type="checkbox" name="ratio" value="32x9" class="ratio"
+                                    id="searchbar-ratio-32x9"><label for="searchbar-ratio-32x9">32 × 9</label></td>
+                            <td><input type="checkbox" name="ratio" value="10x16" class="ratio"
+                                    id="searchbar-ratio-10x16"><label for="searchbar-ratio-10x16">10 × 16</label></td>
+                            <td><input type="checkbox" name="ratio" value="3x2" class="ratio"
+                                    id="searchbar-ratio-3x2"><label for="searchbar-ratio-3x2">3 × 2</label></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="checkbox" name="ratio" value="48x9" class="ratio"
+                                    id="searchbar-ratio-48x9"><label for="searchbar-ratio-48x9">48 × 9</label></td>
+                            <td><input type="checkbox" name="ratio" value="9x18" class="ratio"
+                                    id="searchbar-ratio-9x18"><label for="searchbar-ratio-9x18">9 × 18</label></td>
+                            <td><input type="checkbox" name="ratio" value="4x3" class="ratio"
+                                    id="searchbar-ratio-4x3"><label for="searchbar-ratio-4x3">4 × 3</label></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="checkbox" name="ratio" value="5x4" class="ratio"
+                                    id="searchbar-ratio-5x4"><label for="searchbar-ratio-5x4">5 × 4</label></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button class="button-refresh" id="search-submit">
+            <el-icon>
+                <Refresh />
+            </el-icon>
+        </button>
+    </el-drawer>
 </template>
 <script lang="ts" setup>
-import { Search, CloseBold } from '@element-plus/icons-vue'
+import { Search, CloseBold, Operation, Top, Bottom, Refresh } from '@element-plus/icons-vue'
 import { ref } from 'vue';
 
 const searchText = ref<string>('')
+
+const showDrawer = ref(false)
+
+const checkboxCategory = ref<string[]>(['General', 'Anime', 'People'])
+const categories = ['General', 'Anime', 'People']
+
+const clickOperation = function () {
+    showDrawer.value = !showDrawer.value
+}
+
 </script>
 <style lang="less" scoped>
 .search-bar-wrapper {
@@ -41,6 +275,202 @@ const searchText = ref<string>('')
             margin-left: 10px;
             flex: 1;
         }
+    }
+}
+
+.operation-btn-wrapper {
+    height: 80%;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .operation-btn {
+        height: 100%;
+        font-size: 24px;
+
+        &:hover {
+            background-color: var(--navbar-btn-hover-color);
+            border-radius: 3px;
+        }
+    }
+
+}
+</style>
+<style lang="less">
+.search-drawer {
+    background-color: var(--search-bar-drawer-bg-color);
+    background-image: linear-gradient(to bottom, #292c2f 0, rgba(34, 34, 34, .5) 100%);
+
+    .framed {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        padding: 3px;
+        margin: 0.33em 0;
+        height: auto;
+        white-space: nowrap;
+        border-radius: 3px;
+        background-color: rgba(30, 30, 30, .5);
+        box-shadow: inset 1px 1px 1px rgb(0 0 0 / 40%), 1px 1px 0 rgb(127 127 127 / 10%);
+    }
+
+    .framed label:not(:last-of-type) {
+        margin-right: 3px;
+    }
+
+    input[type=checkbox],
+    input[type=radio] {
+        white-space: nowrap;
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        outline: 0 none;
+        border-style: solid;
+        border-color: inherit;
+        font-size: 1em;
+        line-height: 1.3em;
+        vertical-align: baseline;
+        font-family: inherit;
+        text-decoration: none;
+        font-style: normal;
+        text-overflow: ellipsis;
+        color: inherit;
+        box-sizing: border-box;
+        -webkit-backface-visibility: hidden;
+        visibility: hidden;
+        position: fixed;
+        width: 0;
+        height: 0;
+    }
+
+    input[type=checkbox]+label,
+    input[type=radio]+label {
+        white-space: nowrap;
+        margin: 0;
+        border-width: 0;
+        outline: 0 none;
+        border-style: solid;
+        border-color: inherit;
+        font-size: 1em;
+        line-height: 1.3em;
+        vertical-align: baseline;
+        font-family: inherit;
+        text-decoration: none;
+        font-style: normal;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+        -webkit-backface-visibility: hidden;
+        flex-grow: 1;
+        flex-basis: 0;
+        user-select: none;
+        box-shadow: inset 0 0 .75em rgba(255, 255, 255, .03), 0 2px 0 #222, 0 3px 4px -3px #000, 0 1px 2px rgba(0, 0, 0, .2);
+        display: inline-block;
+        padding: .5em;
+        min-width: 5em;
+        text-align: center;
+        cursor: pointer;
+        color: #aaa;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, .75);
+        background-color: #353535;
+        background-image: linear-gradient(to bottom, #404040 0, #292929 100%);
+        border-radius: 2px;
+        transition-property: color, background, text-shadow, box-shadow;
+        transition-duration: .25s;
+    }
+
+    input[type=checkbox]:checked+label,
+    input[type=radio]:checked+label {
+        color: #fff;
+        background-color: #5e5e5e;
+        background-image: linear-gradient(to bottom, #777 0, #444 100%);
+    }
+
+    input:checked+label.purity {
+        color: #9f9;
+        background-color: #474;
+        background-image: linear-gradient(to bottom, #595 0, #353 100%);
+    }
+
+    hr {
+        margin: 0.5em 0;
+        border-width: 1px 0 0;
+    }
+
+    .respicker-wrapper {
+        width: 100%;
+        display: inline-block;
+        overflow: hidden;
+    }
+
+    .respicker p {
+        text-align: center;
+        font-size: 0.8em;
+    }
+
+    .respicker table {
+        width: 100%;
+        margin: 0.5em 0;
+        text-align: center;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    table thead {
+        border-bottom: 1px solid rgba(127, 127, 127, .5);
+    }
+
+    .label-table td,
+    .label-table th {
+        padding: 2px;
+    }
+
+    .label-table th {
+        font-size: 0.8em !important;
+    }
+
+    .label-table td label {
+        font-size: 0.5em !important;
+        width: 100%;
+        line-height: 2em;
+    }
+
+    .roportion-wrapper .label-table td label {
+        font-size: 0.8em !important;
+    }
+
+    #search-sorting-checks {
+        display: grid;
+        grid-template-columns: repeat(4, 25%);
+        grid-row-gap: 3px;
+
+        label {
+            margin-right: 3px;
+        }
+
+        label:nth-child(8),
+        label:nth-child(16) {
+            margin-right: 0;
+        }
+    }
+
+    .button-refresh {
+        width: 100%;
+        border-width: 0;
+        font-size: 1.1em;
+        box-sizing: border-box;
+        height: 2.3em;
+        text-align: center;
+        cursor: pointer;
+        color: #ddd;
+        text-shadow: -1px -1px 0 #000;
+        border-radius: 3px;
+        background-color: #204650;
+        background-image: linear-gradient(to bottom, #275660 0, #183640 100%);
+        background-size: 100% 150%;
+        background-position: 0 100%;
+        display: inline-block;
+        vertical-align: middle;
     }
 }
 </style>

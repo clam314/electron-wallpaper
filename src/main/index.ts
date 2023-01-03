@@ -18,6 +18,8 @@ function createWindow(): void {
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       sandbox: false,
+      nodeIntegration: true,
+      contextIsolation: false
     }
   })
 

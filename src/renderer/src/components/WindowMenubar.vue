@@ -1,7 +1,7 @@
 <template>
   <div class="menu-bar">
     <SearchBar class="search-bar" v-if="show" />
-    <div class="nav-btn-container">
+    <div class="nav-btn-container" v-if="!isMacOS">
       <div class="icon" @click="minClick">
         <el-icon>
           <Minus />
@@ -29,6 +29,7 @@ defineProps({
   show: { type: Boolean, default: true }
 })
 
+const isMacOS = process.platform === 'darwin'
 const ipcRenderer = window.ipcRenderer
 const minClick = (): void => ipcRenderer.send('window-min')
 const maxClick = (): void => ipcRenderer.send('window-max')
