@@ -1,257 +1,474 @@
 <template>
-    <div class="search-bar-wrapper">
-        <div class="search-bar">
-            <el-icon>
-                <Search />
-            </el-icon>
-            <input v-model="searchText" />
-        </div>
-        <el-icon v-if="searchText" class="close-btn" @click="() => searchText = ''">
-            <CloseBold />
-        </el-icon>
-    </div>
-    <div class="operation-btn-wrapper">
-        <el-icon class="operation-btn" @click="clickOperation">
-            <Operation />
-        </el-icon>
-    </div>
-    <el-drawer class="search-drawer" v-model="showDrawer" :with-header="false" :size="'38%'">
-        <div id="search-sorting-checks" class="framed">
-            <input type="radio" name="sorting" value="relevance" id="search-relevance" checked>
-            <label for="search-relevance">Relevance</label>
-            <input type="radio" name="sorting" value="random" id="search-random">
-            <label for="search-random">Random</label>
-            <input type="radio" name="sorting" value="date_added" id="search-date">
-            <label for="search-date">Date Added</label>
-            <input type="radio" name="sorting" value="views" id="search-views">
-            <label for="search-views">Views</label>
-            <input type="radio" name="sorting" value="favorites" id="search-favorites">
-            <label for="search-favorites">Favorites</label>
-            <input type="radio" name="sorting" value="toplist" id="search-toplist">
-            <label for="search-toplist">Toplist</label>
-            <input type="radio" name="sorting" value="hot" id="search-hot">
-            <label for="search-hot">Hot</label>
-            <input type="checkbox" name="order" value="desc" id="search-order">
-            <label for="search-order" original-title="Ascending/Descending">
-                <el-icon style="height: 100%;">
-                    <Top />
+    <div class="container">
+        <div class="search-bar-wrapper">
+            <div class="search-bar">
+                <el-icon>
+                    <Search />
                 </el-icon>
-            </label>
-        </div>
-        <hr />
-        <div id="search-category-checks" class="framed">
-            <input type="checkbox" name="general" value="general" id="search-general" checked>
-            <label for="search-general">General</label>
-            <input type="checkbox" name="anime" value="anime" id="search-anime">
-            <label for="search-anime">Anime</label>
-            <input type="checkbox" name="people" value="people" id="search-people">
-            <label for="search-people">People</label>
-        </div>
-        <div id="search-purity-checks" class="framed">
-            <input type="checkbox" name="sfw" value="sfw" id="search-sfw" checked>
-            <label class="purity sfw" for="search-sfw">SFW</label>
-            <input type="checkbox" name="sketchy" value="sketchy" id="search-sketchy">
-            <label class="purity sketchy" for="search-sketchy">Sketchy</label>
-            <input type="checkbox" name="nsfw" value="nsfw" id="search-nsfw">
-            <label class="purity nsfw" for="search-nsfw">NSFW</label>
-        </div>
-        <hr />
-        <div class="resolution-wrapper respicker-wrapper">
-            <div class="framed">
-                <input type="radio" name="searchbar-respicter-limitation" id="searchbar-respicker-atleast"
-                    value="atleast" checked>
-                <label for="searchbar-respicker-atleast">
-                    <i class="far fa-plus"></i> At Least
-                </label>
-                <input type="radio" name="searchbar-respicker-limitation" id="searchbar-respicker-exactly"
-                    value="exactly">
-                <label for="searchbar-respicker-exactly">
-                    <i class="far fa-dot-circle"></i> Exactly
-                </label>
+                <input v-model="searchText" @keydown.enter.prevent="clickSearch" />
             </div>
-            <div class="respicker">
-                <p class="respicker-native-info">Your screen resolution is <strong><em>5120 × 2880</em></strong>.</p>
-                <table class="label-table">
-                    <thead>
-                        <tr>
-                            <th>Ultrawide</th>
-                            <th>16:9</th>
-                            <th>16:10</th>
-                            <th>4:3</th>
-                            <th>5:4</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1080"
-                                    value="2560x1080"><label for="searchbar-respicker-2560x1080"
-                                    original-title="Dual 1080p">2560 × 1080</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x720"
-                                    value="1280x720"><label for="searchbar-respicker-1280x720" original-title="">1280 ×
-                                    720</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x800"
-                                    value="1280x800"><label for="searchbar-respicker-1280x800" original-title="">1280 ×
-                                    800</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x960"
-                                    value="1280x960"><label for="searchbar-respicker-1280x960" original-title="">1280 ×
-                                    960</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1280x1024"
-                                    value="1280x1024"><label for="searchbar-respicker-1280x1024" original-title="">1280
-                                    × 1024</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3440x1440"
-                                    value="3440x1440"><label for="searchbar-respicker-3440x1440" original-title="">3440
-                                    × 1440</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x900"
-                                    value="1600x900"><label for="searchbar-respicker-1600x900" original-title="">1600 ×
-                                    900</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x1000"
-                                    value="1600x1000"><label for="searchbar-respicker-1600x1000" original-title="">1600
-                                    × 1000</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x1200"
-                                    value="1600x1200"><label for="searchbar-respicker-1600x1200" original-title="">1600
-                                    × 1200</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1600x1280"
-                                    value="1600x1280"><label for="searchbar-respicker-1600x1280" original-title="">1600
-                                    × 1280</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x1600"
-                                    value="3840x1600"><label for="searchbar-respicker-3840x1600" original-title="">3840
-                                    × 1600</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1080"
-                                    value="1920x1080"><label for="searchbar-respicker-1920x1080"
-                                    original-title="Full HD">1920 × 1080</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1200"
-                                    value="1920x1200"><label for="searchbar-respicker-1920x1200" original-title="">1920
-                                    × 1200</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1440"
-                                    value="1920x1440"><label for="searchbar-respicker-1920x1440" original-title="">1920
-                                    × 1440</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-1920x1536"
-                                    value="1920x1536"><label for="searchbar-respicker-1920x1536" original-title="">1920
-                                    × 1536</label></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1440"
-                                    value="2560x1440"><label for="searchbar-respicker-2560x1440" original-title="">2560
-                                    × 1440</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1600"
-                                    value="2560x1600"><label for="searchbar-respicker-2560x1600" original-title="">2560
-                                    × 1600</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x1920"
-                                    value="2560x1920"><label for="searchbar-respicker-2560x1920" original-title="">2560
-                                    × 1920</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-2560x2048"
-                                    value="2560x2048"><label for="searchbar-respicker-2560x2048" original-title="">2560
-                                    × 2048</label></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x2160"
-                                    value="3840x2160"><label for="searchbar-respicker-3840x2160"
-                                    original-title="4k">3840 × 2160</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x2400"
-                                    value="3840x2400"><label for="searchbar-respicker-3840x2400" original-title="">3840
-                                    × 2400</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x2880"
-                                    value="3840x2880"><label for="searchbar-respicker-3840x2880" original-title="">3840
-                                    × 2880</label></td>
-                            <td><input type="checkbox" name="respicker-resolution" id="searchbar-respicker-3840x3072"
-                                    value="3840x3072"><label for="searchbar-respicker-3840x3072" original-title="">3840
-                                    × 3072</label></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <hr />
-        <div class="roportion-wrapper respicker-wrapper">
-            <div class="respicker">
-                <table class="label-table">
-                    <thead>
-                        <tr>
-                            <th>Wide</th>
-                            <th>Ultrawide</th>
-                            <th>Portrait</th>
-                            <th>Square</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="2"><input type="checkbox" name="ratio" value="landscape" class="ratio"
-                                    id="searchbar-ratio-landscape"><label for="searchbar-ratio-landscape"> All Wide
-                                </label></td>
-                            <td><input type="checkbox" name="ratio" value="portrait" class="ratio"
-                                    id="searchbar-ratio-portrait"><label for="searchbar-ratio-portrait"> All Portrait
-                                </label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="ratio" value="16x9" class="ratio"
-                                    id="searchbar-ratio-16x9"><label for="searchbar-ratio-16x9">16 × 9</label></td>
-                            <td><input type="checkbox" name="ratio" value="21x9" class="ratio"
-                                    id="searchbar-ratio-21x9"><label for="searchbar-ratio-21x9">21 × 9</label></td>
-                            <td><input type="checkbox" name="ratio" value="9x16" class="ratio"
-                                    id="searchbar-ratio-9x16"><label for="searchbar-ratio-9x16">9 × 16</label></td>
-                            <td><input type="checkbox" name="ratio" value="1x1" class="ratio"
-                                    id="searchbar-ratio-1x1"><label for="searchbar-ratio-1x1">1 × 1</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="ratio" value="16x10" class="ratio"
-                                    id="searchbar-ratio-16x10"><label for="searchbar-ratio-16x10">16 × 10</label></td>
-                            <td><input type="checkbox" name="ratio" value="32x9" class="ratio"
-                                    id="searchbar-ratio-32x9"><label for="searchbar-ratio-32x9">32 × 9</label></td>
-                            <td><input type="checkbox" name="ratio" value="10x16" class="ratio"
-                                    id="searchbar-ratio-10x16"><label for="searchbar-ratio-10x16">10 × 16</label></td>
-                            <td><input type="checkbox" name="ratio" value="3x2" class="ratio"
-                                    id="searchbar-ratio-3x2"><label for="searchbar-ratio-3x2">3 × 2</label></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="checkbox" name="ratio" value="48x9" class="ratio"
-                                    id="searchbar-ratio-48x9"><label for="searchbar-ratio-48x9">48 × 9</label></td>
-                            <td><input type="checkbox" name="ratio" value="9x18" class="ratio"
-                                    id="searchbar-ratio-9x18"><label for="searchbar-ratio-9x18">9 × 18</label></td>
-                            <td><input type="checkbox" name="ratio" value="4x3" class="ratio"
-                                    id="searchbar-ratio-4x3"><label for="searchbar-ratio-4x3">4 × 3</label></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><input type="checkbox" name="ratio" value="5x4" class="ratio"
-                                    id="searchbar-ratio-5x4"><label for="searchbar-ratio-5x4">5 × 4</label></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <button class="button-refresh" id="search-submit">
-            <el-icon>
-                <Refresh />
+            <el-icon v-if="searchText" class="close-btn" @click="() => searchText = ''">
+                <CloseBold />
             </el-icon>
-        </button>
-    </el-drawer>
+        </div>
+        <div class="operation-btn-wrapper">
+            <el-icon class="operation-btn" @click="clickOperation">
+                <Operation />
+            </el-icon>
+        </div>
+        <el-drawer class="search-drawer" v-model="showDrawer" :with-header="false" :size="'38%'">
+            <div id="search-sorting-checks" class="framed">
+                <input type="radio" value="relevance" id="search-relevance" v-model="sorting">
+                <label for="search-relevance">Relevance</label>
+                <input type="radio" value="random" id="search-random" v-model="sorting">
+                <label for="search-random">Random</label>
+                <input type="radio" value="date_added" id="search-date" v-model="sorting">
+                <label for="search-date">Date Added</label>
+                <input type="radio" value="views" id="search-views" v-model="sorting">
+                <label for="search-views">Views</label>
+                <input type="radio" value="favorites" id="search-favorites" v-model="sorting">
+                <label for="search-favorites">Favorites</label>
+                <input type="radio" value="toplist" id="search-toplist" v-model="sorting">
+                <label for="search-toplist">Toplist</label>
+                <input type="radio" value="hot" id="search-hot" v-model="sorting">
+                <label for="search-hot">Hot</label>
+                <input type="checkbox" name="order" value="desc" id="search-order" v-model="order">
+                <label for="search-order" original-title="Ascending/Descending">
+                    <el-icon style="height: 100%;" v-if="isDesc">
+                        <Bottom />
+                    </el-icon>
+                    <el-icon style="height: 100%;" v-if="!isDesc">
+                        <Top />
+                    </el-icon>
+                </label>
+            </div>
+            <hr />
+            <div id="search-category-checks" class="framed">
+                <input type="checkbox" value="general" id="search-general" v-model="categoriesSelected">
+                <label for="search-general">General</label>
+                <input type="checkbox" value="anime" id="search-anime" v-model="categoriesSelected">
+                <label for="search-anime">Anime</label>
+                <input type="checkbox" value="people" id="search-people" v-model="categoriesSelected">
+                <label for="search-people">People</label>
+            </div>
+            <div id="search-purity-checks" class="framed">
+                <input type="checkbox" value="sfw" id="search-sfw" v-model="puritySelected">
+                <label class="purity sfw" for="search-sfw">SFW</label>
+                <input type="checkbox" value="sketchy" id="search-sketchy" v-model="puritySelected">
+                <label class="purity sketchy" for="search-sketchy">Sketchy</label>
+                <input type="checkbox" value="nsfw" id="search-nsfw" v-model="puritySelected">
+                <label class="purity nsfw" for="search-nsfw">NSFW</label>
+            </div>
+            <hr />
+            <div class="resolution-wrapper respicker-wrapper">
+                <div class="framed">
+                    <input type="radio" id="searchbar-respicker-atleast" value="atleast" v-model="limit">
+                    <label for="searchbar-respicker-atleast">At Least</label>
+                    <input type="radio" id="searchbar-respicker-exactly" value="exactly" v-model="limit">
+                    <label for="searchbar-respicker-exactly">Exactly</label>
+                </div>
+                <div class="respicker">
+                    <p class="respicker-native-info">Your screen resolution is <strong><em>5120 × 2880</em></strong>.
+                    </p>
+                    <table class="label-table">
+                        <thead>
+                            <tr>
+                                <th>Ultrawide</th>
+                                <th>16:9</th>
+                                <th>16:10</th>
+                                <th>4:3</th>
+                                <th>5:4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-2560x1080" value="2560x1080">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-2560x1080" value="2560x1080">
+                                    <label for="searchbar-respicker-2560x1080" original-title="Dual 1080p">2560 ×
+                                        1080</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1280x720" value="1280x720">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1280x720" value="1280x720">
+                                    <label for="searchbar-respicker-1280x720" original-title="">1280 ×
+                                        720</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1280x800" value="1280x800">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1280x800" value="1280x800">
+                                    <label for="searchbar-respicker-1280x800" original-title="">1280 ×
+                                        800</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1280x960" value="1280x960">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1280x960" value="1280x960">
+                                    <label for="searchbar-respicker-1280x960" original-title="">1280 ×
+                                        960</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1280x1024" value="1280x1024">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1280x1024" value="1280x1024">
+                                    <label for="searchbar-respicker-1280x1024" original-title="">1280
+                                        × 1024</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-3440x1440" value="3440x1440">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-3440x1440" value="3440x1440">
+                                    <label for="searchbar-respicker-3440x1440" original-title="">3440
+                                        × 1440</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1600x900" value="1600x900">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1600x900" value="1600x900">
+                                    <label for="searchbar-respicker-1600x900" original-title="">1600 ×
+                                        900</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1600x1000" value="1600x1000">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1600x1000" value="1600x1000">
+                                    <label for="searchbar-respicker-1600x1000" original-title="">1600
+                                        × 1000</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1600x1200" value="1600x1200">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1600x1200" value="1600x1200">
+                                    <label for="searchbar-respicker-1600x1200" original-title="">1600
+                                        × 1200</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1600x1280" value="1600x1280">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1600x1280" value="1600x1280">
+                                    <label for="searchbar-respicker-1600x1280" original-title="">1600
+                                        × 1280</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-3840x1600" value="3840x1600">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-3840x1600" value="3840x1600">
+                                    <label for="searchbar-respicker-3840x1600" original-title="">3840
+                                        × 1600</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1920x1080" value="1920x1080">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1920x1080" value="1920x1080">
+                                    <label for="searchbar-respicker-1920x1080" original-title="Full HD">1920 ×
+                                        1080</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1920x1200" value="1920x1200">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1920x1200" value="1920x1200">
+                                    <label for="searchbar-respicker-1920x1200" original-title="">1920
+                                        × 1200</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1920x1440" value="1920x1440">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1920x1440" value="1920x1440">
+                                    <label for="searchbar-respicker-1920x1440" original-title="">1920
+                                        × 1440</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-1920x1536" value="1920x1536">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-1920x1536" value="1920x1536">
+                                    <label for="searchbar-respicker-1920x1536" original-title="">1920
+                                        × 1536</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-2560x1440" value="2560x1440">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-2560x1440" value="2560x1440">
+                                    <label for="searchbar-respicker-2560x1440" original-title="">2560
+                                        × 1440</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-2560x1600" value="2560x1600">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-2560x1600" value="2560x1600">
+                                    <label for="searchbar-respicker-2560x1600" original-title="">2560
+                                        × 1600</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-2560x1920" value="2560x1920">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-2560x1920" value="2560x1920">
+                                    <label for="searchbar-respicker-2560x1920" original-title="">2560
+                                        × 1920</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-2560x2048" value="2560x2048">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-2560x2048" value="2560x2048">
+                                    <label for="searchbar-respicker-2560x2048" original-title="">2560
+                                        × 2048</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-3840x2160" value="3840x2160">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-3840x2160" value="3840x2160">
+                                    <label for="searchbar-respicker-3840x2160" original-title="4k">3840 × 2160</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-3840x2400" value="3840x2400">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-3840x2400" value="3840x2400">
+                                    <label for="searchbar-respicker-3840x2400" original-title="">3840
+                                        × 2400</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-3840x2880" value="3840x2880">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-3840x2880" value="3840x2880">
+                                    <label for="searchbar-respicker-3840x2880" original-title="">3840
+                                        × 2880</label>
+                                </td>
+                                <td>
+                                    <input v-if="isAtLast" type="radio" v-model="atleast"
+                                        id="searchbar-respicker-3840x3072" value="3840x3072">
+                                    <input v-else type="checkbox" v-model="resolutions"
+                                        id="searchbar-respicker-3840x3072" value="3840x3072">
+                                    <label for="searchbar-respicker-3840x3072" original-title="">3840
+                                        × 3072</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+            <div class="roportion-wrapper respicker-wrapper">
+                <div class="respicker">
+                    <table class="label-table">
+                        <thead>
+                            <tr>
+                                <th>Wide</th>
+                                <th>Ultrawide</th>
+                                <th>Portrait</th>
+                                <th>Square</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="checkbox" value="landscape" class="ratio"
+                                        id="searchbar-ratio-landscape" v-model='ratios'>
+                                    <label for="searchbar-ratio-landscape">All Wide</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="portrait" class="ratio" id="searchbar-ratio-portrait"
+                                        v-model='ratios'>
+                                    <label for="searchbar-ratio-portrait">All Portrait</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" value="16x9" class="ratio" id="searchbar-ratio-16x9"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-16x9">16 × 9</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="21x9" class="ratio" id="searchbar-ratio-21x9"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-21x9">21 × 9</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="9x16" class="ratio" id="searchbar-ratio-9x16"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-9x16">9 × 16</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="1x1" class="ratio" id="searchbar-ratio-1x1"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-1x1">1 × 1</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" value="16x10" class="ratio" id="searchbar-ratio-16x10"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-16x10">16 × 10</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="32x9" class="ratio" id="searchbar-ratio-32x9"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-32x9">32 × 9</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="10x16" class="ratio" id="searchbar-ratio-10x16"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-10x16">10 × 16</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="3x2" class="ratio" id="searchbar-ratio-3x2"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-3x2">3 × 2</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" value="48x9" class="ratio" id="searchbar-ratio-48x9"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-48x9">48 × 9</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="9x18" class="ratio" id="searchbar-ratio-9x18"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-9x18">9 × 18</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="4x3" class="ratio" id="searchbar-ratio-4x3"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-4x3">4 × 3</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" value="5x4" class="ratio" id="searchbar-ratio-5x4"
+                                        v-model="ratios">
+                                    <label for="searchbar-ratio-5x4">5 × 4</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button class="button-refresh" @click="clickRefresh">
+                <el-icon>
+                    <Refresh />
+                </el-icon>
+            </button>
+        </el-drawer>
+    </div>
 </template>
 <script lang="ts" setup>
 import { Search, CloseBold, Operation, Top, Bottom, Refresh } from '@element-plus/icons-vue'
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const searchText = ref<string>('')
 
 const showDrawer = ref(false)
 
-const checkboxCategory = ref<string[]>(['General', 'Anime', 'People'])
-const categories = ['General', 'Anime', 'People']
+// date_added*, relevance, random, views, favorites, toplist
+const sorting = ref<string>('date_added')
+const categoriesArray = ['general', 'anime', 'people']
+const categoriesSelected = ref<string[]>(categoriesArray)
+const purityArray = ['sfw', 'sketchy', 'nsfw']
+const puritySelected = ref<string[]>(purityArray.slice(0, 1))
+
+const order = ref<string[]>(['desc'])
+//分辨率的筛选状态
+const limit = ref<string>('atleast')
+
+const atleast = ref<string>('')
+const resolutions = ref<string[]>([])
+// landscape,portrait,16x9,21x9,9x16,1x1,16x10,32x9,10x16,3x2,48x9,9x18,4x3,5x4
+const ratios = ref<string[]>([])
+
+const isAtLast = computed((): boolean => {
+    return limit.value === 'atleast'
+})
+const isDesc = computed((): boolean => {
+    return order.value.includes('desc')
+})
+
+// 100*/110/111/etc (sfw/sketchy/nsfw)
+const purity = computed((): string => {
+    let checked = ''
+    purityArray.forEach((value) => {
+        checked = checked + (categoriesSelected.value.includes(value) ? 1 : 0)
+    });
+    return checked
+})
+// 100/101/111*/etc (general/anime/people)
+const categories = computed((): string => {
+    let checked = ''
+    categoriesArray.forEach((value) => {
+        checked = checked + (categoriesSelected.value.includes(value) ? 1 : 0)
+    });
+    return checked
+})
 
 const clickOperation = function () {
     showDrawer.value = !showDrawer.value
 }
 
+const clickRefresh = function () {
+    sorting.value = 'date_added'
+    categoriesSelected.value = categoriesArray
+    puritySelected.value = purityArray.slice(0, 1)
+    order.value = ['desc']
+    limit.value = 'atleast'
+    atleast.value = ''
+    resolutions.value = []
+    ratios.value = []
+}
+
+const clickSearch = function () {
+    console.log(searchText)
+    const query = {}
+}
+
 </script>
 <style lang="less" scoped>
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    justify-content: center;
+}
+
 .search-bar-wrapper {
     height: 80%;
     width: 50%;
