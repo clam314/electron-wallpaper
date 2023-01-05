@@ -1,11 +1,27 @@
 <template>
   <div class="container">
     <main>
-      <el-scrollbar :height="(mainHeight - barHeight) + 'px'">
+      <el-scrollbar ref="scrollbarRef" :height="(mainHeight - barHeight) + 'px'">
         <div class="img-container-wrapper">
           <template v-for="(item, index) in data" :key="index">
-            <div class="img-container" :style="imgSize">
-              <el-image :src="item?.thumbs?.small" />
+            <div class="img-container" :class="{ 'thumb-border': item.purity !== 'sfw' }" :style="imgSize">
+              <el-image :src="item?.thumbs?.small" :preview-src-list="[item.path]" :lazy="true">
+              </el-image>
+              <div class="thumb-info">
+                <div class="thumb-info-box">
+                  {{ item.favorites }}
+                  <el-icon>
+                    <StarFilled />
+                  </el-icon>
+                </div>
+                <span class="wall-res">{{ item.resolution }}</span>
+                <div class="thumb-info-box">
+                  {{ item.views }}
+                  <el-icon>
+                    <View />
+                  </el-icon>
+                </div>
+              </div>
             </div>
           </template>
 
@@ -19,10 +35,14 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { StarFilled, View } from '@element-plus/icons-vue'
 import { reactive, onMounted, ref, onUnmounted, computed, watch } from 'vue';
 import { searchWallpaper } from '../../request/index'
-import type { Data, Thumb, Meta } from '../../request/SearchData'
+import type { Data, Meta } from '../../request/SearchData'
 import { searchParamStore } from '@renderer/stores'
+import type { ElScrollbar } from 'element-plus'
+import { ElLoading } from 'element-plus';
+import 'element-plus/theme-chalk/el-loading.css'
 
 const store = searchParamStore()
 store.$subscribe(() => {
@@ -40,7 +60,6 @@ const pager = reactive<Meta>({
 
 const data = reactive<Data[]>([])
 
-
 const barHeight = 40 + 40 + 10
 const mainHeight = ref<number>(800)
 const mainWidth = ref<number>(800)
@@ -49,13 +68,13 @@ const imgSize = computed(() => {
     return {
       width: '450px',
       height: '300px',
-      padding: '10px'
+      margin: '10px'
     }
   }
   return {
     width: '300px',
     height: '200px',
-    padding: '6px'
+    margin: '6px'
   }
 })
 
@@ -77,16 +96,30 @@ const changeWindow = debounce(() => {
   mainWidth.value = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
 })
 
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+
 const queryWallper = async function (currentPage) {
-  const pageInfo = await searchWallpaper(Object.assign({ page: currentPage }, store.searchParam))
-  if (pageInfo.data) {
-    data.length = 0
-    data.push(...pageInfo.data)
-  }
-  if (pageInfo.meta) {
-    console.log(pageInfo.meta)
-    pager.current_page = pageInfo.meta.current_page
-    pager.last_page = pageInfo.meta.last_page
+  const loading = ElLoading.service({
+    lock: true,
+    text: 'Loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+  try {
+    const pageInfo = await searchWallpaper(Object.assign({ page: currentPage, apikey: '4yiobr45qi3fhpfisMBwrSsxUcNIaSJ5' }, store.searchParam))
+    if (pageInfo.data) {
+      data.length = 0
+      data.push(...pageInfo.data)
+    }
+    if (pageInfo.meta) {
+      console.log(pageInfo.meta)
+      pager.current_page = pageInfo.meta.current_page
+      pager.last_page = pageInfo.meta.last_page
+    }
+    scrollbarRef.value?.setScrollTop(0)
+  } catch (error) {
+
+  } finally {
+    loading.close()
   }
 }
 
@@ -128,18 +161,60 @@ onUnmounted(() => {
       align-items: center;
       flex-wrap: wrap;
 
+      .thumb-border {
+        border: 2px solid rgba(255, 200, 64, .8);
+        box-shadow: inset 0 0 4px rgb(0 0 0 / 75%);
+      }
+
       .img-container {
         width: 300px;
         height: 200px;
         overflow: hidden;
-        border-radius: 10px;
-        padding: 6px;
+        border-radius: 8px;
+        margin: 6px;
 
         .el-image {
           width: inherit;
           height: inherit;
           overflow: inherit;
-          border-radius: inherit;
+          background-color: var(--image-placeholder-bg);
+
+          /deep/ .el-image__placeholder {
+            background-color: transparent;
+          }
+        }
+
+        &:hover .thumb-info {
+          bottom: 1.6em !important;
+        }
+
+        .thumb-info {
+          width: 100%;
+          height: 1.5em;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          position: relative;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, .165);
+          background-image: linear-gradient(to bottom, rgba(0, 0, 0, .03) 0, rgba(0, 0, 0, .3) 100%);
+          transition: bottom 0.3s linear;
+
+
+          .thumb-info-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin: 0 10px;
+            font-size: 14px;
+
+            .el-icon {
+              margin-left: 3px;
+              font-size: 16px;
+            }
+          }
         }
       }
     }

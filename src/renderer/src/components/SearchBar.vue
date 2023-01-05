@@ -16,7 +16,7 @@
                 <Operation />
             </el-icon>
         </div>
-        <el-drawer class="search-drawer" v-model="showDrawer" :with-header="false" :size="'38%'">
+        <el-drawer class="search-drawer" v-model="showDrawer" :with-header="false" :size="'35%'">
             <div id="search-sorting-checks" class="framed">
                 <input type="radio" value="relevance" id="search-relevance" v-model="sorting">
                 <label for="search-relevance">Relevance</label>
@@ -286,10 +286,10 @@
                     <table class="label-table">
                         <thead>
                             <tr>
-                                <th>Wide</th>
-                                <th>Ultrawide</th>
-                                <th>Portrait</th>
-                                <th>Square</th>
+                                <th style="width: 25%;">Wide</th>
+                                <th style="width: 25%;">Ultrawide</th>
+                                <th style="width: 25%;">Portrait</th>
+                                <th style="width: 25%;">Square</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -546,7 +546,7 @@ const clickSearch = function () {
 <style lang="less">
 .search-drawer {
     background-color: var(--search-bar-drawer-bg-color);
-    background-image: linear-gradient(to bottom, #292c2f 0, rgba(34, 34, 34, .5) 100%);
+    // background-image: linear-gradient(to bottom, #292c2f 0, rgba(34, 34, 34, .5) 100%);
 
     .framed {
         position: relative;
@@ -574,7 +574,7 @@ const clickSearch = function () {
         outline: 0 none;
         border-style: solid;
         border-color: inherit;
-        font-size: 1em;
+        font-size: 0.8em;
         line-height: 1.3em;
         vertical-align: baseline;
         font-family: inherit;
@@ -583,7 +583,6 @@ const clickSearch = function () {
         text-overflow: ellipsis;
         color: inherit;
         box-sizing: border-box;
-        -webkit-backface-visibility: hidden;
         visibility: hidden;
         position: fixed;
         width: 0;
@@ -598,7 +597,7 @@ const clickSearch = function () {
         outline: 0 none;
         border-style: solid;
         border-color: inherit;
-        font-size: 1em;
+        font-size: 0.8em;
         line-height: 1.3em;
         vertical-align: baseline;
         font-family: inherit;
@@ -606,7 +605,6 @@ const clickSearch = function () {
         font-style: normal;
         text-overflow: ellipsis;
         box-sizing: border-box;
-        -webkit-backface-visibility: hidden;
         flex-grow: 1;
         flex-basis: 0;
         user-select: none;
@@ -681,9 +679,9 @@ const clickSearch = function () {
         line-height: 2em;
     }
 
-    .roportion-wrapper .label-table td label {
-        font-size: 0.8em !important;
-    }
+    // .roportion-wrapper .label-table td label {
+    //     font-size: 0.8em !important;
+    // }
 
     #search-sorting-checks {
         display: grid;
@@ -728,7 +726,7 @@ const clickSearch = function () {
             }
         }
 
-        i:hover {
+        &:hover i {
             animation: spin 1s ease-in-out infinite;
         }
     }
