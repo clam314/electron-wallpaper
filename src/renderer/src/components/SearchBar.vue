@@ -392,6 +392,10 @@
 <script lang="ts" setup>
 import { Search, CloseBold, Operation, Top, Bottom, Refresh } from '@element-plus/icons-vue'
 import { ref, computed } from 'vue';
+import type { SearchParameter } from '@renderer/request/SearchParameter';
+import { searchParamStore } from '@renderer/stores'
+
+const store = searchParamStore()
 
 const searchText = ref<string>('')
 
@@ -405,7 +409,7 @@ const purityArray = ['sfw', 'sketchy', 'nsfw']
 const puritySelected = ref<string[]>(purityArray.slice(0, 1))
 
 const order = ref<string[]>(['desc'])
-//分辨率的筛选状态
+// 分辨率的筛选状态
 const limit = ref<string>('atleast')
 
 const atleast = ref<string>('')
@@ -424,7 +428,7 @@ const isDesc = computed((): boolean => {
 const purity = computed((): string => {
     let checked = ''
     purityArray.forEach((value) => {
-        checked = checked + (categoriesSelected.value.includes(value) ? 1 : 0)
+        checked = checked + (puritySelected.value.includes(value) ? 1 : 0)
     });
     return checked
 })
@@ -450,11 +454,36 @@ const clickRefresh = function () {
     atleast.value = ''
     resolutions.value = []
     ratios.value = []
+    clickSearch()
+    setTimeout(clickOperation, 1000)
 }
 
 const clickSearch = function () {
-    console.log(searchText)
-    const query = {}
+    const query: SearchParameter = {
+        categories: categories.value,
+        purity: purity.value,
+        sorting: sorting.value,
+        order: order.value.includes('desc') ? 'desc' : 'asc'
+    }
+    if (searchText.value !== '') {
+        query.q = searchText.value
+    }
+    if (sorting.value === 'random') {
+        query.seed = Math.random().toString(36).slice(-6);
+    }
+    if (limit.value === 'atleast') {
+        if (atleast.value) {
+            query.atleast = atleast.value
+        }
+    } else if (limit.value === 'exactly') {
+        if (resolutions.value.length > 0) {
+            query.resolutions = resolutions.value.join(',')
+        }
+    }
+    if (ratios.value.length > 0) {
+        query.ratios = ratios.value.join(',')
+    }
+    store.searchParam = query
 }
 
 </script>
@@ -688,6 +717,20 @@ const clickSearch = function () {
         background-position: 0 100%;
         display: inline-block;
         vertical-align: middle;
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        i:hover {
+            animation: spin 1s ease-in-out infinite;
+        }
     }
 }
 </style>

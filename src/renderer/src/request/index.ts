@@ -41,6 +41,7 @@ async function searchWallpaper(parameter = {}): Promise<RootObject> {
     if (str.length > 0) {
         str = '?' + str.substring(0, str.length - 1)
     }
+    console.log(str)
     return request.get(`search${str}`)
 }
 

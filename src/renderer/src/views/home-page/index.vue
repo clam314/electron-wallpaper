@@ -21,7 +21,13 @@
 <script lang="ts" setup>
 import { reactive, onMounted, ref, onUnmounted, computed, watch } from 'vue';
 import { searchWallpaper } from '../../request/index'
-import type { RootObject, Data, Thumb, Meta } from '../../request/SearchData'
+import type { Data, Thumb, Meta } from '../../request/SearchData'
+import { searchParamStore } from '@renderer/stores'
+
+const store = searchParamStore()
+store.$subscribe(() => {
+  pager.current_page == 1 ? queryWallper(1) : pager.current_page = 1
+})
 
 const pager = reactive<Meta>({
   current_page: 1,
@@ -72,7 +78,7 @@ const changeWindow = debounce(() => {
 })
 
 const queryWallper = async function (currentPage) {
-  const pageInfo = await searchWallpaper({ page: currentPage })
+  const pageInfo = await searchWallpaper(Object.assign({ page: currentPage }, store.searchParam))
   if (pageInfo.data) {
     data.length = 0
     data.push(...pageInfo.data)
@@ -94,15 +100,7 @@ onMounted(async () => {
   mainWidth.value = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
   window.addEventListener('resize', changeWindow)
 
-  const pageInfo = await searchWallpaper({})
-  if (pageInfo.data) {
-    // data.push(...pageInfo.data)
-  }
-  if (pageInfo.meta) {
-    console.log(pageInfo.meta)
-    pager.current_page = pageInfo.meta.current_page
-    pager.last_page = pageInfo.meta.last_page
-  }
+  queryWallper(pager.current_page)
 })
 
 
