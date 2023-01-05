@@ -68,7 +68,8 @@
                     <label for="searchbar-respicker-exactly">Exactly</label>
                 </div>
                 <div class="respicker">
-                    <p class="respicker-native-info">Your screen resolution is <strong><em>5120 × 2880</em></strong>.
+                    <p class="respicker-native-info">Your screen resolution is <strong><em>{{ windowSize[0]}} ×
+                                {{ windowSize[1]}}</em></strong>.
                     </p>
                     <table class="label-table">
                         <thead>
@@ -391,11 +392,13 @@
 </template>
 <script lang="ts" setup>
 import { Search, CloseBold, Operation, Top, Bottom, Refresh } from '@element-plus/icons-vue'
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import type { SearchParameter } from '@renderer/request/SearchParameter';
 import { searchParamStore } from '@renderer/stores'
 
 const store = searchParamStore()
+
+const windowSize = ref<number[]>([0, 0])
 
 const searchText = ref<string>('')
 
@@ -486,6 +489,9 @@ const clickSearch = function () {
     store.searchParam = query
 }
 
+onMounted(() => {
+    windowSize.value = [window.screen.width, window.screen.height]
+})
 </script>
 <style lang="less" scoped>
 .container {

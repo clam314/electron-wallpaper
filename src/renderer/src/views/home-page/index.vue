@@ -179,7 +179,7 @@ onUnmounted(() => {
           overflow: inherit;
           background-color: var(--image-placeholder-bg);
 
-          /deep/ .el-image__placeholder {
+          :deep(.el-image__placeholder) {
             background-color: transparent;
           }
         }
